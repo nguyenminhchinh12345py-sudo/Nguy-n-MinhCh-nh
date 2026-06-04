@@ -1,0 +1,76 @@
+
+img{
+    height: 200px;
+    width: 200px;
+}
+header{
+    display: flex;
+    background-color: darkblue;
+}
+h1{
+    color: aliceblue;
+}
+h2{
+    color: darkgoldenrod;
+}
+.TĐ1 {
+    color: aliceblue;
+}
+.TĐ{
+    margin: 20px;
+}
+a{
+    text-decoration: none;
+    color: aliceblue;
+    margin-left: 50px;
+    font-size: 20px;
+
+}
+nav{
+    margin-left: 60px;
+    height: 200px;
+    text-align: center;
+    display: flex;
+    flex-wrap: nowrap;
+}
+main{
+    display: flex;
+}
+aside{
+    background-color: blue;
+    padding: 50px;
+}
+
+.LT1{
+    width: 30px;
+    height: 30px;
+}
+.LT2{
+    color: azure;
+    font-size: 20px;
+    margin: 5px;
+}
+.ND1{
+ padding: 200px ;
+}
+.PG{
+    display: flex;
+    margin: 20px;
+}
+
+
+
+
+
+
+
+
+footer{
+    display: flex;
+    background-color: blue;
+    
+}
+.TG1{
+    width: 20px;
+    height: 20PX;
+}
