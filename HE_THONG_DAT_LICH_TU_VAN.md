@@ -1,189 +1,381 @@
-# Hệ thống đặt lịch tư vấn tâm lý và pháp lý cho sinh viên
+# ĐỒ ÁN: HỆ THỐNG ĐẶT LỊCH TƯ VẤN TÂM LÝ VÀ PHÁP LÝ CHO SINH VIÊN
 
-> **Trạng thái tài liệu:** Bản khởi thảo yêu cầu và thiết kế.  
-> **Lưu ý:** Issue dự án có đính kèm `Tai_lieu_du_an_chia_the_ghi_chu.docx` và `PRD_Dat_lich_tu_van_tam_ly_va_phap_ly.docx`, nhưng nội dung tệp chưa được đọc trong phiên này. Vì vậy, nội dung dưới đây được xây dựng từ tên dự án và cần được đối chiếu, cập nhật theo hai tài liệu gốc trước khi xem là yêu cầu đã chốt.
+> **Tài liệu phân tích và thiết kế hệ thống**  
+> Phiên bản: 1.0 (bản dự thảo)  
+> Ngôn ngữ: Tiếng Việt  
+> Trạng thái: Đang hoàn thiện yêu cầu
 
-## 1. Tổng quan
+---
 
-Hệ thống giúp sinh viên tìm kiếm dịch vụ tư vấn tâm lý hoặc pháp lý, xem thông tin chuyên viên, chọn khung giờ phù hợp và quản lý lịch hẹn. Hệ thống cũng hỗ trợ chuyên viên quản lý lịch làm việc và hỗ trợ người quản trị vận hành dịch vụ.
+## Mục lục
 
-### Mục tiêu
+1. [Giới thiệu đề tài](#1-giới-thiệu-đề-tài)
+2. [Lý do chọn đề tài](#2-lý-do-chọn-đề-tài)
+3. [Mục tiêu và phạm vi](#3-mục-tiêu-và-phạm-vi)
+4. [Đối tượng sử dụng](#4-đối-tượng-sử-dụng)
+5. [Yêu cầu hệ thống](#5-yêu-cầu-hệ-thống)
+6. [Quy trình nghiệp vụ](#6-quy-trình-nghiệp-vụ)
+7. [Chức năng từng phân hệ](#7-chức-năng-từng-phân-hệ)
+8. [Sơ đồ hoạt động](#8-sơ-đồ-hoạt-động)
+9. [Thiết kế dữ liệu](#9-thiết-kế-dữ-liệu)
+10. [Thiết kế API tham khảo](#10-thiết-kế-api-tham-khảo)
+11. [Mã minh họa và giải thích trình tự](#11-mã-minh-họa-và-giải-thích-trình-tự)
+12. [Giao diện dự kiến](#12-giao-diện-dự-kiến)
+13. [Bảo mật và quyền riêng tư](#13-bảo-mật-và-quyền-riêng-tư)
+14. [Kế hoạch kiểm thử](#14-kế-hoạch-kiểm-thử)
+15. [Kế hoạch thực hiện](#15-kế-hoạch-thực-hiện)
+16. [Cấu trúc thư mục dự án](#16-cấu-trúc-thư-mục-dự-án)
+17. [Hướng dẫn xem tài liệu bằng Visual Studio Code](#17-hướng-dẫn-xem-tài-liệu-bằng-visual-studio-code)
+18. [Các nội dung cần xác nhận](#18-các-nội-dung-cần-xác-nhận)
+19. [Tài liệu tham khảo của đề tài](#19-tài-liệu-tham-khảo-của-đề-tài)
 
-- Giúp sinh viên đặt, xem, đổi hoặc hủy lịch thuận tiện.
-- Hạn chế trùng lịch và giúp chuyên viên quản lý lịch hẹn tập trung.
-- Bảo vệ thông tin cá nhân và thông tin nhạy cảm của người sử dụng.
-- Cung cấp quy trình rõ ràng để sinh viên biết trạng thái lịch hẹn và cách nhận hỗ trợ.
+---
 
-### Nguyên tắc thiết kế
+## 1. Giới thiệu đề tài
 
-1. **Riêng tư trước tiên:** chỉ thu thập dữ liệu cần thiết, giới hạn người được xem.
-2. **Tôn trọng và không phán xét:** ngôn từ thân thiện, dễ hiểu, phù hợp với sinh viên.
-3. **Minh bạch:** hiển thị rõ loại tư vấn, thời lượng, hình thức, quy định đổi/hủy và trạng thái lịch.
-4. **An toàn:** hệ thống đặt lịch không thay thế dịch vụ cấp cứu, chẩn đoán y khoa hoặc tư vấn pháp lý chính thức.
-5. **Dễ tiếp cận:** giao diện hoạt động tốt trên điện thoại và hỗ trợ người dùng có nhu cầu tiếp cận khác nhau.
+### 1.1 Tên đề tài
 
-## 2. Phạm vi dự kiến
+**Hệ thống đặt lịch tư vấn tâm lý và pháp lý cho sinh viên**
 
-### Trong phạm vi
+### 1.2 Mô tả tổng quát
 
-- Đăng ký, đăng nhập và quản lý hồ sơ cơ bản.
-- Xem danh mục tư vấn tâm lý và pháp lý.
-- Xem hồ sơ chuyên viên và các khung giờ còn trống.
-- Tạo, xem, đổi hoặc hủy lịch theo chính sách được cấu hình.
-- Nhận thông báo về việc đặt lịch và thay đổi trạng thái.
-- Chuyên viên quản lý giờ làm việc và lịch hẹn.
-- Quản trị viên quản lý người dùng, dịch vụ, chuyên viên và báo cáo vận hành ở mức phù hợp.
+Đây là hệ thống hỗ trợ sinh viên tìm hiểu dịch vụ tư vấn của nhà trường, chọn lĩnh vực cần hỗ trợ, xem thời gian còn trống và gửi yêu cầu đặt lịch với chuyên viên. Sau khi đặt lịch, sinh viên có thể theo dõi trạng thái, xem lại thông tin lịch hẹn, đổi hoặc hủy lịch theo quy định.
 
-### Ngoài phạm vi (cần xác nhận)
+Hệ thống có ba nhóm người dùng chính:
 
-- Chẩn đoán, điều trị hoặc đưa ra kết luận tự động về tình trạng tâm lý.
-- Hệ thống tự động đưa ra lời khuyên pháp lý có tính ràng buộc.
-- Thanh toán trực tuyến, tích hợp hồ sơ bệnh án hoặc hồ sơ pháp lý bên ngoài.
-- Ghi âm hoặc ghi hình buổi tư vấn.
+- **Sinh viên:** tìm dịch vụ, đặt lịch và quản lý lịch cá nhân.
+- **Chuyên viên tư vấn:** quản lý giờ làm việc và xử lý các lịch được phân công.
+- **Quản trị viên:** quản lý tài khoản, dịch vụ, lịch và cấu hình chung.
 
-> Các mục trên chỉ được đưa vào phạm vi khi có yêu cầu, đánh giá rủi ro và quy trình bảo vệ dữ liệu phù hợp.
+> **Lưu ý về trạng thái dự án:** Nội dung dưới đây là tài liệu phân tích/thiết kế dự kiến theo tên đề tài. Cần đối chiếu với PRD và tài liệu ghi chú đính kèm trong Issue #1 trước khi chốt yêu cầu. Các ví dụ mã là minh họa luồng xử lý, chưa phải mã triển khai hoàn chỉnh.
 
-## 3. Đối tượng sử dụng và quyền hạn
+### 1.3 Từ viết tắt
 
-| Vai trò | Nhu cầu chính | Quyền dự kiến |
+| Từ viết tắt | Ý nghĩa |
+|---|---|
+| UI | Giao diện người dùng |
+| API | Giao diện để các ứng dụng trao đổi dữ liệu |
+| CSDL | Cơ sở dữ liệu |
+| FR | Yêu cầu chức năng (Functional Requirement) |
+| NFR | Yêu cầu phi chức năng (Non-functional Requirement) |
+| CRUD | Tạo, đọc, cập nhật, xóa dữ liệu |
+
+---
+
+## 2. Lý do chọn đề tài
+
+Sinh viên có thể gặp khó khăn trong học tập, cuộc sống, sức khỏe tinh thần hoặc các vấn đề pháp lý nhưng chưa biết tìm đúng đầu mối hỗ trợ. Việc đặt lịch qua nhiều kênh thủ công có thể gây bất tiện, khó theo dõi lịch trống và dễ xảy ra trùng lịch.
+
+Hệ thống được đề xuất nhằm:
+
+1. Tập trung thông tin về dịch vụ tư vấn tại một nơi.
+2. Giúp sinh viên chủ động chọn thời gian phù hợp.
+3. Giúp chuyên viên quản lý lịch làm việc có tổ chức.
+4. Giảm thao tác thủ công trong việc tiếp nhận và xác nhận lịch.
+5. Hạn chế lộ thông tin riêng tư của người sử dụng dịch vụ.
+
+---
+
+## 3. Mục tiêu và phạm vi
+
+### 3.1 Mục tiêu
+
+- Xây dựng quy trình đặt lịch rõ ràng, dễ sử dụng.
+- Hiển thị các khung giờ còn trống và ngăn hai người đặt cùng một khung giờ.
+- Cho phép các vai trò sử dụng đúng chức năng được phân quyền.
+- Thông báo cho sinh viên khi lịch được tạo, xác nhận, thay đổi hoặc hủy.
+- Bảo vệ thông tin cá nhân và thông tin nhạy cảm bằng các biện pháp phù hợp.
+
+### 3.2 Phạm vi chức năng dự kiến
+
+| Mã | Phạm vi | Mô tả |
 |---|---|---|
-| Sinh viên | Tìm và đặt lịch tư vấn | Quản lý hồ sơ và lịch của chính mình; xem thông tin dịch vụ công khai |
-| Chuyên viên | Quản lý lịch làm việc và buổi tư vấn | Quản lý khung giờ, xem lịch được phân công và cập nhật trạng thái cần thiết |
-| Quản trị viên | Vận hành hệ thống | Quản lý tài khoản, dịch vụ, chuyên viên và cấu hình; quyền truy cập dữ liệu nhạy cảm cần bị giới hạn và ghi nhật ký |
+| P-01 | Tài khoản | Đăng nhập, đăng xuất, quản lý hồ sơ cơ bản |
+| P-02 | Dịch vụ | Xem các dịch vụ tư vấn tâm lý và pháp lý |
+| P-03 | Chuyên viên | Xem hồ sơ giới thiệu và lịch làm việc được công khai |
+| P-04 | Đặt lịch | Chọn dịch vụ, chuyên viên, khung giờ và gửi yêu cầu |
+| P-05 | Quản lý lịch | Xem, đổi hoặc hủy lịch theo chính sách |
+| P-06 | Quản lý chuyên viên | Cập nhật giờ làm việc và xử lý lịch được phân công |
+| P-07 | Quản trị | Quản lý người dùng, dịch vụ và cấu hình hệ thống |
+| P-08 | Thông báo | Thông báo các sự kiện cần thiết liên quan đến lịch hẹn |
 
-## 4. Quy trình chính
+### 3.3 Ngoài phạm vi bản đầu (cần xác nhận)
 
-### Đặt lịch của sinh viên
+- Chẩn đoán hoặc điều trị tâm lý tự động.
+- Đưa ra kết luận pháp lý tự động có tính ràng buộc.
+- Thanh toán trực tuyến.
+- Ghi âm hoặc ghi hình buổi tư vấn.
+- Lưu trữ hồ sơ tư vấn chi tiết hoặc hồ sơ y tế/pháp lý.
+- Tích hợp với hệ thống quản lý sinh viên khác.
 
-1. Sinh viên đăng nhập hoặc tạo tài khoản.
-2. Chọn loại tư vấn: tâm lý hoặc pháp lý.
-3. Xem thông tin dịch vụ, chuyên viên, hình thức tư vấn và thời lượng.
-4. Chọn ngày, giờ còn trống và cung cấp thông tin tối thiểu cần thiết cho buổi hẹn.
-5. Xác nhận yêu cầu đặt lịch.
-6. Hệ thống kiểm tra khung giờ lần cuối để tránh đặt trùng.
-7. Hệ thống tạo lịch và thông báo kết quả cùng trạng thái hiện tại.
-8. Sinh viên có thể xem, đổi hoặc hủy lịch theo chính sách.
+---
 
-### Xử lý lịch của chuyên viên
+## 4. Đối tượng sử dụng
 
-1. Chuyên viên thiết lập hoặc cập nhật giờ làm việc.
-2. Hệ thống hiển thị lịch được phân công.
-3. Chuyên viên cập nhật trạng thái buổi hẹn theo quy trình vận hành.
-4. Nếu cần thay đổi lịch, hệ thống thông báo cho sinh viên và lưu lại lịch sử thay đổi.
+### 4.1 Sinh viên
 
-## 5. Yêu cầu chức năng dự kiến
+Sinh viên cần xem dịch vụ, chọn lịch trống, gửi yêu cầu đặt lịch và nhận thông báo về tình trạng lịch. Sinh viên chỉ được xem và quản lý lịch thuộc tài khoản của mình.
 
-- **FR-01 – Tài khoản:** đăng ký, đăng nhập, đăng xuất và khôi phục quyền truy cập.
-- **FR-02 – Hồ sơ:** người dùng xem và cập nhật thông tin cá nhân được phép chỉnh sửa.
-- **FR-03 – Danh mục dịch vụ:** hiển thị loại tư vấn, mô tả, hình thức, thời lượng và điều kiện tham gia.
-- **FR-04 – Tìm chuyên viên:** lọc theo loại tư vấn, lịch trống hoặc tiêu chí công khai đã được duyệt.
-- **FR-05 – Đặt lịch:** chỉ cho phép đặt khung giờ còn trống; xác nhận rõ thông tin trước khi gửi.
-- **FR-06 – Quản lý lịch:** xem chi tiết, đổi hoặc hủy lịch theo quy định.
-- **FR-07 – Quản lý lịch làm việc:** chuyên viên tạo và cập nhật khung giờ khả dụng.
-- **FR-08 – Trạng thái lịch:** hỗ trợ các trạng thái như `cho_xac_nhan`, `da_xac_nhan`, `da_huy`, `hoan_thanh` hoặc `vang_mat` (cần thống nhất nghiệp vụ).
-- **FR-09 – Thông báo:** gửi thông báo khi có yêu cầu đặt lịch hoặc thay đổi lịch; không đưa nội dung nhạy cảm vào thông báo không bảo mật.
-- **FR-10 – Quản trị:** quản lý dịch vụ, tài khoản, chuyên viên và cấu hình quyền.
-- **FR-11 – Nhật ký:** ghi lại thao tác quan trọng liên quan đến lịch và quyền truy cập dữ liệu.
+### 4.2 Chuyên viên tư vấn
 
-## 6. Yêu cầu phi chức năng
+Chuyên viên cần khai báo thời gian làm việc, xem lịch được phân công và cập nhật trạng thái buổi hẹn. Chuyên viên không được truy cập lịch của người dùng không liên quan đến công việc được giao.
 
-- **Bảo mật:** xác thực an toàn, phân quyền theo vai trò, mã hóa kết nối và bảo vệ dữ liệu lưu trữ phù hợp.
-- **Riêng tư:** không thu thập thông tin về vấn đề tư vấn nếu không thực sự cần; có thông báo mục đích sử dụng và thời hạn lưu trữ.
-- **Toàn vẹn lịch:** hai yêu cầu đặt cùng một khung giờ không được đồng thời thành công.
-- **Tính sẵn sàng:** thông báo rõ khi hệ thống lỗi; không tạo lịch nửa chừng khi thao tác thất bại.
-- **Khả năng sử dụng:** giao diện tiếng Việt rõ ràng, hoạt động trên màn hình nhỏ và có trạng thái lỗi dễ hiểu.
-- **Khả năng bảo trì:** tách biệt giao diện, nghiệp vụ và lưu trữ dữ liệu; có kiểm thử tự động cho các luồng chính.
-- **Khả năng truy vết:** ghi nhật ký sự kiện quản trị và thay đổi lịch, tránh ghi nội dung tư vấn nhạy cảm vào log.
+### 4.3 Quản trị viên
 
-## 7. Dữ liệu cốt lõi (đề xuất)
+Quản trị viên quản lý danh mục dịch vụ, tài khoản và cấu hình vận hành. Quyền xem thông tin nhạy cảm cần được hạn chế ở mức tối thiểu; mọi truy cập quản trị quan trọng nên được ghi nhật ký.
 
-Các bảng/đối tượng dưới đây là gợi ý ban đầu, cần điều chỉnh theo PRD và công nghệ được chọn.
+### 4.4 Bảng quyền dự kiến
 
-### `NguoiDung`
+| Chức năng | Sinh viên | Chuyên viên | Quản trị viên |
+|---|:---:|:---:|:---:|
+| Xem dịch vụ công khai | ✓ | ✓ | ✓ |
+| Đặt lịch tư vấn | ✓ | — | — |
+| Xem lịch của bản thân | ✓ | — | — |
+| Xem lịch được phân công | — | ✓ | ✓* |
+| Quản lý giờ làm việc | — | ✓ | ✓ |
+| Quản lý tài khoản/dịch vụ | — | — | ✓ |
 
-- `id`: mã định danh.
-- `ho_ten`: tên hiển thị.
-- `email`: email đăng nhập hoặc liên hệ.
-- `vai_tro`: `sinh_vien`, `chuyen_vien`, `quan_tri_vien`.
-- `trang_thai`: trạng thái tài khoản.
-- `created_at`, `updated_at`: thời điểm tạo/cập nhật.
+`*` Quyền của quản trị viên cần giới hạn theo chính sách và có ghi nhật ký truy cập.
 
-### `ChuyenVien`
+---
 
-- `id`, `nguoi_dung_id`.
-- `loai_tu_van`: tâm lý, pháp lý hoặc loại được phê duyệt.
-- `gioi_thieu`: nội dung giới thiệu công khai đã được duyệt.
-- `trang_thai_xac_minh`: trạng thái xác minh thông tin chuyên môn.
+## 5. Yêu cầu hệ thống
 
-### `KhungGio`
+### 5.1 Yêu cầu chức năng
 
-- `id`, `chuyen_vien_id`.
-- `bat_dau_luc`, `ket_thuc_luc`.
-- `hinh_thuc`: trực tiếp hoặc trực tuyến (nếu được hỗ trợ).
-- `trang_thai`: còn trống, đã đặt, không khả dụng.
+| Mã | Tên yêu cầu | Mô tả | Mức ưu tiên |
+|---|---|---|---|
+| FR-01 | Đăng nhập | Người dùng xác thực trước khi sử dụng chức năng cá nhân | Cao |
+| FR-02 | Quản lý hồ sơ | Người dùng xem/cập nhật thông tin được phép | Cao |
+| FR-03 | Xem dịch vụ | Hiển thị loại tư vấn, mô tả, thời lượng và hình thức | Cao |
+| FR-04 | Tìm chuyên viên | Tìm theo lĩnh vực và tiêu chí công khai | Trung bình |
+| FR-05 | Xem giờ trống | Hiển thị các khung giờ khả dụng của chuyên viên | Cao |
+| FR-06 | Tạo lịch hẹn | Gửi yêu cầu đặt một khung giờ còn trống | Cao |
+| FR-07 | Chống trùng lịch | Không cho phép nhiều lịch hợp lệ chiếm cùng một khung giờ | Cao |
+| FR-08 | Quản lý lịch cá nhân | Sinh viên xem, đổi hoặc hủy lịch theo quy định | Cao |
+| FR-09 | Xử lý lịch | Chuyên viên xác nhận/cập nhật trạng thái lịch được phân công | Cao |
+| FR-10 | Quản lý giờ làm việc | Chuyên viên cập nhật khung giờ khả dụng | Trung bình |
+| FR-11 | Gửi thông báo | Báo cho người dùng khi lịch có thay đổi | Trung bình |
+| FR-12 | Quản trị hệ thống | Quản lý tài khoản, dịch vụ và cấu hình | Trung bình |
+| FR-13 | Nhật ký thao tác | Lưu sự kiện quan trọng phục vụ kiểm tra vận hành | Trung bình |
 
-### `LichHen`
+### 5.2 Yêu cầu phi chức năng
 
-- `id`, `sinh_vien_id`, `chuyen_vien_id`, `khung_gio_id`.
-- `loai_tu_van`, `hinh_thuc`.
-- `trang_thai`, `ly_do_huy` (nếu cần và được phép lưu).
-- `created_at`, `updated_at`.
+- **NFR-01 – Bảo mật:** xác thực người dùng, phân quyền phía máy chủ và bảo vệ dữ liệu khi truyền nhận.
+- **NFR-02 – Riêng tư:** chỉ thu thập dữ liệu cần thiết, công bố mục đích sử dụng và giới hạn người có quyền truy cập.
+- **NFR-03 – Toàn vẹn:** thao tác đặt lịch phải tránh đặt trùng kể cả khi có nhiều yêu cầu cùng lúc.
+- **NFR-04 – Khả dụng:** hệ thống hiển thị thông báo lỗi dễ hiểu và không tạo dữ liệu dở dang khi thao tác thất bại.
+- **NFR-05 – Dễ sử dụng:** giao diện tiếng Việt, dễ đọc, tương thích điện thoại và máy tính.
+- **NFR-06 – Dễ bảo trì:** tách giao diện, xử lý nghiệp vụ và truy cập dữ liệu.
+- **NFR-07 – Khả năng truy vết:** ghi lại các thay đổi quan trọng, nhưng không ghi nội dung tư vấn nhạy cảm vào log.
 
-> Không nên lưu nội dung trao đổi trong buổi tư vấn vào bản ghi lịch hẹn. Nếu nghiệp vụ bắt buộc lưu dữ liệu nhạy cảm, cần có đánh giá pháp lý, chính sách đồng ý, thời hạn lưu trữ, phân quyền chặt chẽ và biện pháp bảo vệ riêng.
+---
 
-## 8. Quy tắc nghiệp vụ quan trọng
+## 6. Quy trình nghiệp vụ
 
-- Khung giờ phải có thời điểm bắt đầu trước thời điểm kết thúc.
-- Không cho phép đặt một khung giờ đã được giữ hoặc đã có lịch hợp lệ.
-- Việc kiểm tra và giữ khung giờ phải được thực hiện nguyên tử ở phía máy chủ/cơ sở dữ liệu, không chỉ dựa vào giao diện.
-- Chỉ người sở hữu lịch hoặc nhân sự có quyền phù hợp mới được xem/thay đổi lịch.
-- Quy tắc đặt trước, đổi lịch, hủy lịch, thời gian đệm và xác nhận của chuyên viên cần được cấu hình và thống nhất với PRD.
-- Múi giờ cần được xác định thống nhất; lưu thời gian theo chuẩn phù hợp và hiển thị theo múi giờ người dùng/cơ sở.
-- Trạng thái lịch chỉ chuyển theo các bước hợp lệ, ví dụ không thể chuyển lịch đã hủy thành đã hoàn thành nếu không có thao tác được phân quyền.
+### 6.1 Quy trình đặt lịch của sinh viên
 
-## 9. Mẫu mã minh họa
+1. Sinh viên mở hệ thống.
+2. Sinh viên đăng nhập.
+3. Sinh viên chọn nhóm dịch vụ tâm lý hoặc pháp lý.
+4. Hệ thống hiển thị thông tin dịch vụ và chuyên viên phù hợp.
+5. Sinh viên chọn chuyên viên (nếu nghiệp vụ cho phép chọn).
+6. Hệ thống hiển thị các khung giờ còn trống.
+7. Sinh viên chọn ngày và giờ.
+8. Hệ thống hiển thị trang xác nhận để sinh viên kiểm tra lại thông tin.
+9. Sinh viên xác nhận gửi yêu cầu.
+10. Máy chủ kiểm tra lại quyền, dữ liệu và tình trạng khung giờ.
+11. Nếu khung giờ còn trống, hệ thống tạo lịch và cập nhật khung giờ.
+12. Hệ thống hiển thị mã lịch và trạng thái cho sinh viên.
+13. Hệ thống gửi thông báo cần thiết cho sinh viên/chuyên viên.
 
-Đoạn mã dưới đây là **mã giả JavaScript** để minh họa quy tắc kiểm tra lịch. Đây chưa phải mã triển khai và cần được điều chỉnh theo framework, cơ sở dữ liệu và quy tắc thực tế.
+### 6.2 Quy trình đổi hoặc hủy lịch
 
-```js
-// Mã giả: tạo lịch hẹn an toàn, tránh đặt trùng khung giờ.
-async function datLichHen(yeuCau, nguoiDungHienTai) {
-  if (!nguoiDungHienTai || nguoiDungHienTai.vaiTro !== "sinh_vien") {
-    throw new Error("Bạn cần đăng nhập bằng tài khoản sinh viên.");
-  }
+1. Sinh viên mở danh sách lịch cá nhân.
+2. Sinh viên chọn lịch muốn thay đổi.
+3. Hệ thống kiểm tra lịch thuộc về sinh viên đang đăng nhập.
+4. Hệ thống kiểm tra chính sách đổi/hủy và thời hạn cho phép.
+5. Nếu hợp lệ, hệ thống cập nhật lịch và giải phóng khung giờ cũ (nếu cần).
+6. Hệ thống lưu lịch sử thay đổi và thông báo cho các bên liên quan.
 
-  if (!yeuCau.chuyenVienId || !yeuCau.khungGioId || !yeuCau.loaiTuVan) {
-    throw new Error("Vui lòng chọn chuyên viên, khung giờ và loại tư vấn.");
-  }
+### 6.3 Quy trình của chuyên viên
 
-  // Trong ứng dụng thật, kiểm tra và tạo lịch phải nằm trong một transaction.
-  return coSoDuLieu.transaction(async (giaoDich) => {
-    const khungGio = await giaoDich.khoaVaTimKhungGio(yeuCau.khungGioId);
+1. Chuyên viên đăng nhập tài khoản được cấp.
+2. Chuyên viên cập nhật các khung giờ làm việc.
+3. Hệ thống chỉ cho hiển thị những khung giờ hợp lệ và chưa bị đặt.
+4. Chuyên viên xem danh sách lịch được phân công.
+5. Chuyên viên xác nhận hoặc cập nhật trạng thái theo quy trình được thống nhất.
+6. Hệ thống lưu người thực hiện và thời điểm cập nhật.
 
-    if (!khungGio || khungGio.trangThai !== "con_trong") {
-      throw new Error("Khung giờ này không còn khả dụng. Vui lòng chọn giờ khác.");
-    }
+---
 
-    const lichHen = await giaoDich.taoLichHen({
-      sinhVienId: nguoiDungHienTai.id,
-      chuyenVienId: yeuCau.chuyenVienId,
-      khungGioId: khungGio.id,
-      loaiTuVan: yeuCau.loaiTuVan,
-      trangThai: "cho_xac_nhan",
-    });
+## 7. Chức năng từng phân hệ
 
-    await giaoDich.capNhatTrangThaiKhungGio(khungGio.id, "da_dat");
-    return lichHen;
-  });
+### 7.1 Phân hệ sinh viên
+
+- Đăng nhập/đăng xuất.
+- Xem giới thiệu dịch vụ.
+- Tìm chuyên viên và xem lịch trống.
+- Tạo yêu cầu đặt lịch.
+- Xem danh sách lịch theo trạng thái.
+- Đổi/hủy lịch nếu còn trong thời hạn cho phép.
+- Nhận thông báo về kết quả xử lý.
+
+### 7.2 Phân hệ chuyên viên
+
+- Quản lý thông tin giới thiệu công khai.
+- Thiết lập giờ làm việc và thời gian không nhận lịch.
+- Xem lịch đã được phân công.
+- Cập nhật trạng thái lịch theo quyền.
+- Không xem thông tin không cần thiết cho buổi tư vấn.
+
+### 7.3 Phân hệ quản trị viên
+
+- Tạo, khóa hoặc cập nhật tài khoản theo quy trình.
+- Quản lý nhóm dịch vụ và thông tin công khai.
+- Quản lý hồ sơ chuyên viên và trạng thái xác minh.
+- Xem báo cáo tổng hợp phục vụ vận hành.
+- Theo dõi nhật ký thao tác quản trị.
+
+---
+
+## 8. Sơ đồ hoạt động
+
+### 8.1 Luồng đặt lịch
+
+```mermaid
+flowchart TD
+    A([Bắt đầu]) --> B[Đăng nhập]
+    B --> C[Chọn loại tư vấn]
+    C --> D[Xem chuyên viên và giờ trống]
+    D --> E[Chọn khung giờ]
+    E --> F[Xác nhận thông tin]
+    F --> G{Khung giờ còn trống?}
+    G -- Không --> H[Thông báo chọn giờ khác]
+    H --> D
+    G -- Có --> I[Tạo lịch hẹn]
+    I --> J[Cập nhật trạng thái khung giờ]
+    J --> K[Gửi thông báo]
+    K --> L[Hiển thị mã và trạng thái lịch]
+    L --> M([Kết thúc])
+```
+
+### 8.2 Trạng thái lịch dự kiến
+
+```mermaid
+stateDiagram-v2
+    [*] --> ChoXacNhan: Sinh viên gửi yêu cầu
+    ChoXacNhan --> DaXacNhan: Chuyên viên/hệ thống xác nhận
+    ChoXacNhan --> DaHuy: Hủy yêu cầu
+    DaXacNhan --> DaHuy: Hủy theo chính sách
+    DaXacNhan --> HoanThanh: Buổi tư vấn kết thúc
+    DaXacNhan --> VangMat: Không tham dự
+    DaHuy --> [*]
+    HoanThanh --> [*]
+    VangMat --> [*]
+```
+
+Tên trạng thái và quy tắc chuyển trạng thái cần được chốt theo PRD.
+
+---
+
+## 9. Thiết kế dữ liệu
+
+### 9.1 Bảng `nguoi_dung`
+
+| Trường | Kiểu dữ liệu tham khảo | Ý nghĩa |
+|---|---|---|
+| `id` | UUID / BIGINT | Khóa chính |
+| `ho_ten` | VARCHAR | Tên hiển thị |
+| `email` | VARCHAR | Email đăng nhập/liên hệ |
+| `mat_khau_hash` | VARCHAR | Mật khẩu đã băm, không lưu mật khẩu rõ |
+| `vai_tro` | ENUM / VARCHAR | Sinh viên, chuyên viên, quản trị viên |
+| `trang_thai` | VARCHAR | Hoạt động, tạm khóa, chờ xác minh |
+| `created_at` | DATETIME | Thời điểm tạo |
+| `updated_at` | DATETIME | Thời điểm cập nhật |
+
+### 9.2 Bảng `chuyen_vien`
+
+| Trường | Kiểu dữ liệu tham khảo | Ý nghĩa |
+|---|---|---|
+| `id` | UUID / BIGINT | Khóa chính |
+| `nguoi_dung_id` | UUID / BIGINT | Liên kết tài khoản người dùng |
+| `linh_vuc` | VARCHAR | Lĩnh vực tư vấn được phân công |
+| `gioi_thieu_cong_khai` | TEXT | Nội dung giới thiệu đã được duyệt |
+| `trang_thai_xac_minh` | VARCHAR | Trạng thái xác minh chuyên môn |
+
+### 9.3 Bảng `khung_gio`
+
+| Trường | Kiểu dữ liệu tham khảo | Ý nghĩa |
+|---|---|---|
+| `id` | UUID / BIGINT | Khóa chính |
+| `chuyen_vien_id` | UUID / BIGINT | Chuyên viên sở hữu khung giờ |
+| `bat_dau_luc` | DATETIME | Thời gian bắt đầu |
+| `ket_thuc_luc` | DATETIME | Thời gian kết thúc |
+| `trang_thai` | VARCHAR | Còn trống, đã giữ, đã đặt, không khả dụng |
+
+### 9.4 Bảng `lich_hen`
+
+| Trường | Kiểu dữ liệu tham khảo | Ý nghĩa |
+|---|---|---|
+| `id` | UUID / BIGINT | Khóa chính |
+| `ma_lich` | VARCHAR | Mã dễ đọc để tra cứu |
+| `sinh_vien_id` | UUID / BIGINT | Người đặt lịch |
+| `chuyen_vien_id` | UUID / BIGINT | Chuyên viên được phân công |
+| `khung_gio_id` | UUID / BIGINT | Khung giờ được đặt |
+| `loai_tu_van` | VARCHAR | Tâm lý hoặc pháp lý |
+| `hinh_thuc` | VARCHAR | Trực tiếp/trực tuyến nếu được hỗ trợ |
+| `trang_thai` | VARCHAR | Trạng thái hiện tại của lịch |
+| `created_at` | DATETIME | Thời điểm tạo lịch |
+| `updated_at` | DATETIME | Thời điểm cập nhật gần nhất |
+
+### 9.5 Quan hệ dữ liệu
+
+```mermaid
+erDiagram
+    NGUOI_DUNG ||--o| CHUYEN_VIEN : "có hồ sơ"
+    NGUOI_DUNG ||--o{ LICH_HEN : "sinh viên đặt"
+    CHUYEN_VIEN ||--o{ KHUNG_GIO : "mở khung giờ"
+    CHUYEN_VIEN ||--o{ LICH_HEN : "được phân công"
+    KHUNG_GIO ||--o| LICH_HEN : "được đặt"
+```
+
+> Đây là mô hình khởi đầu. Không lưu nội dung trao đổi trong buổi tư vấn vào bảng lịch hẹn nếu không có yêu cầu nghiệp vụ, cơ sở pháp lý và phương án bảo vệ dữ liệu riêng.
+
+---
+
+## 10. Thiết kế API tham khảo
+
+| Phương thức | Đường dẫn | Chức năng | Quyền dự kiến |
+|---|---|---|---|
+| `POST` | `/api/dang-nhap` | Đăng nhập | Công khai |
+| `GET` | `/api/dich-vu` | Xem danh sách dịch vụ | Người dùng |
+| `GET` | `/api/chuyen-vien` | Xem/tìm chuyên viên công khai | Người dùng |
+| `GET` | `/api/khung-gio` | Xem khung giờ còn trống | Người dùng |
+| `POST` | `/api/lich-hen` | Tạo lịch hẹn | Sinh viên |
+| `GET` | `/api/lich-hen/cua-toi` | Xem lịch của tài khoản hiện tại | Sinh viên |
+| `PATCH` | `/api/lich-hen/{id}` | Đổi/hủy/cập nhật trạng thái | Theo vai trò và quyền sở hữu |
+| `POST` | `/api/chuyen-vien/khung-gio` | Tạo khung giờ | Chuyên viên |
+| `GET` | `/api/chuyen-vien/lich-hen` | Xem lịch được phân công | Chuyên viên |
+| `GET` | `/api/quan-tri/bao-cao` | Xem số liệu tổng hợp | Quản trị viên |
+
+### 10.1 Ví dụ yêu cầu tạo lịch
+
+```json
+{
+  "chuyen_vien_id": "CV-001",
+  "khung_gio_id": "KG-2026-001",
+  "loai_tu_van": "tam_ly",
+  "hinh_thuc": "truc_tiep"
 }
 ```
 
-### Ví dụ phản hồi API
+### 10.2 Ví dụ phản hồi thành công
 
 ```json
 {
   "thong_bao": "Yêu cầu đặt lịch đã được ghi nhận.",
-  "lich_hen": {
+  "du_lieu": {
     "ma_lich": "LH-000123",
     "trang_thai": "cho_xac_nhan",
     "bat_dau_luc": "2026-11-12T09:00:00+07:00"
@@ -191,95 +383,320 @@ async function datLichHen(yeuCau, nguoiDungHienTai) {
 }
 ```
 
-Tên trường và trạng thái trong ví dụ chỉ mang tính minh họa; API thực tế cần thống nhất quy ước đặt tên.
+### 10.3 Nguyên tắc API
 
-## 10. API dự kiến
+- Kiểm tra xác thực và quyền trên máy chủ, không chỉ ẩn nút trên giao diện.
+- Kiểm tra dữ liệu đầu vào và trả lỗi bằng thông báo dễ hiểu.
+- Không trả dữ liệu cá nhân không cần thiết.
+- Dùng mã lỗi phù hợp, không đưa thông tin hệ thống nội bộ vào phản hồi cho người dùng.
+- Đảm bảo thao tác tạo lịch có tính nhất quán khi nhiều yêu cầu đến đồng thời.
 
-| Phương thức | Đường dẫn | Mục đích |
-|---|---|---|
-| `GET` | `/api/dich-vu` | Xem danh mục dịch vụ |
-| `GET` | `/api/chuyen-vien` | Tìm chuyên viên theo tiêu chí công khai |
-| `GET` | `/api/khung-gio?chuyen_vien_id=...&ngay=...` | Xem giờ còn trống |
-| `POST` | `/api/lich-hen` | Tạo yêu cầu đặt lịch |
-| `GET` | `/api/lich-hen/cua-toi` | Xem lịch của người dùng đang đăng nhập |
-| `PATCH` | `/api/lich-hen/{id}` | Đổi trạng thái hoặc cập nhật lịch theo quyền |
-| `DELETE` | `/api/lich-hen/{id}` | Hủy lịch nếu chính sách cho phép |
+---
 
-Mọi API cần xác thực, kiểm tra quyền truy cập trên máy chủ, xác thực dữ liệu đầu vào và trả lỗi không làm lộ thông tin nhạy cảm.
+## 11. Mã minh họa và giải thích trình tự
 
-## 11. Bảo mật, riêng tư và an toàn người dùng
+> **Quan trọng:** Đoạn mã dưới đây là mã giả minh họa cách chia bước xử lý. Nó phụ thuộc vào các hàm của máy chủ và cơ sở dữ liệu, nên không thể chạy độc lập nếu chưa xây dựng các thành phần đó.
 
-- Chỉ yêu cầu dữ liệu tối thiểu để điều phối lịch.
-- Không đưa loại vấn đề tư vấn, nội dung riêng tư hoặc thông tin nhạy cảm vào tiêu đề email, thông báo màn hình khóa hoặc URL.
-- Áp dụng phân quyền tối thiểu; chuyên viên chỉ xem thông tin cần thiết cho lịch được phân công.
-- Bảo vệ phiên đăng nhập, mật khẩu và dữ liệu truyền nhận; không lưu mật khẩu dạng văn bản thuần.
-- Giới hạn truy cập quản trị và ghi nhật ký truy cập/thay đổi quan trọng.
-- Có quy trình xử lý yêu cầu xóa, chỉnh sửa hoặc xuất dữ liệu theo chính sách và quy định áp dụng.
-- Hiển thị chính sách quyền riêng tư, mục đích xử lý dữ liệu và thông tin liên hệ hỗ trợ.
-- Nêu rõ dịch vụ đặt lịch không phải kênh cấp cứu. Nếu người dùng đang gặp nguy hiểm tức thời, hướng dẫn họ liên hệ dịch vụ khẩn cấp tại địa phương hoặc người hỗ trợ đáng tin cậy.
-- Không hiển thị đánh giá công khai hoặc hồ sơ có thể tiết lộ việc một sinh viên đã sử dụng dịch vụ nhạy cảm.
+### 11.1 Luồng phía giao diện: gửi yêu cầu đặt lịch
 
-## 12. Kiểm thử cần có
+```js
+// Hàm được gọi khi sinh viên bấm nút "Xác nhận đặt lịch".
+async function xuLyNutDatLich() {
+  // Bước 1: Lấy dữ liệu sinh viên đã chọn trên giao diện.
+  const duLieuDatLich = {
+    chuyen_vien_id: layChuyenVienDangChon(),
+    khung_gio_id: layKhungGioDangChon(),
+    loai_tu_van: layLoaiTuVanDangChon(),
+  };
 
-- Sinh viên đặt được khung giờ còn trống.
-- Hai yêu cầu đồng thời cho cùng khung giờ: chỉ một yêu cầu thành công.
-- Không cho đặt khung giờ trong quá khứ hoặc khung giờ không thuộc chuyên viên đã chọn.
-- Người dùng không thể xem hoặc sửa lịch của người khác.
-- Đổi/hủy lịch tuân thủ chính sách và cập nhật trạng thái nhất quán.
-- Chuyên viên chỉ xem được lịch được phân công.
-- Kiểm tra dữ liệu đầu vào, lỗi mạng và lỗi cơ sở dữ liệu không tạo lịch trùng hoặc lịch không hoàn chỉnh.
-- Thông báo không chứa dữ liệu nhạy cảm.
-- Kiểm tra giao diện trên điện thoại, bàn phím và trình đọc màn hình ở các luồng chính.
+  // Bước 2: Kiểm tra nhanh các trường bắt buộc để báo lỗi sớm.
+  if (!duLieuDatLich.chuyen_vien_id || !duLieuDatLich.khung_gio_id) {
+    hienThiThongBao("Vui lòng chọn chuyên viên và khung giờ.");
+    return; // Dừng xử lý nếu người dùng chưa chọn đủ thông tin.
+  }
 
-## 13. Gợi ý cấu trúc thư mục
+  // Bước 3: Khóa nút để tránh gửi liên tục nhiều lần.
+  batTrangThaiDangGui(true);
 
-Cấu trúc cuối cùng phụ thuộc vào công nghệ được nhóm chọn. Ví dụ:
+  try {
+    // Bước 4: Gửi dữ liệu đến máy chủ.
+    const ketQua = await apiTaoLichHen(duLieuDatLich);
 
-```text
-.
-├── docs/
-│   ├── HE_THONG_DAT_LICH_TU_VAN.md
-│   ├── API.md
-│   └── QUYEN_RIENG_TU.md
-├── frontend/
-├── backend/
-├── database/
-├── tests/
-├── .env.example
-└── README.md
+    // Bước 5: Thông báo kết quả và tải lại lịch/khung giờ mới.
+    hienThiThongBao(`Đã gửi yêu cầu. Mã lịch: ${ketQua.ma_lich}`);
+    await taiDanhSachLichCuaToi();
+  } catch (loi) {
+    // Bước 6: Hiển thị lỗi thân thiện; không để lộ thông tin kỹ thuật.
+    hienThiThongBao(loi.thong_bao || "Chưa thể đặt lịch. Vui lòng thử lại.");
+  } finally {
+    // Bước 7: Mở lại nút dù yêu cầu thành công hay thất bại.
+    batTrangThaiDangGui(false);
+  }
+}
 ```
 
-Không đưa mật khẩu, khóa API hoặc dữ liệu thật của sinh viên vào Git. Chỉ đưa biến mẫu không chứa bí mật vào `.env.example`.
+**Giải thích trình tự:** Giao diện chỉ hỗ trợ kiểm tra ban đầu và hiển thị kết quả. Việc xác minh quyền, kiểm tra khung giờ còn trống và chống đặt trùng phải được thực hiện ở phía máy chủ.
 
-## 14. Kế hoạch triển khai gợi ý
+### 11.2 Luồng phía máy chủ: kiểm tra và tạo lịch
 
-1. Đọc và chốt yêu cầu từ PRD cùng tài liệu ghi chú.
-2. Xác định quy tắc đặt/đổi/hủy lịch, vai trò và dữ liệu cần thu thập.
-3. Vẽ luồng người dùng, wireframe và mô hình dữ liệu.
-4. Xây dựng đăng nhập, phân quyền và danh mục dịch vụ.
-5. Xây dựng lịch khả dụng và quy trình đặt lịch có chống trùng.
-6. Bổ sung quản lý lịch, thông báo và giao diện quản trị.
-7. Kiểm thử quyền riêng tư, bảo mật, khả năng tiếp cận và các tình huống đồng thời.
-8. Triển khai thử nghiệm với dữ liệu giả; chỉ dùng dữ liệu thật sau khi có phê duyệt và quy trình bảo vệ phù hợp.
+```js
+// Mã giả phía máy chủ; cần thay các hàm khoDuLieu bằng truy vấn CSDL thật.
+async function taoLichHen(yeuCau, nguoiDung) {
+  // Bước 1: Chỉ tài khoản sinh viên hợp lệ mới được tạo lịch.
+  if (!nguoiDung || nguoiDung.vai_tro !== "sinh_vien") {
+    throw loiHttp(403, "Bạn không có quyền thực hiện thao tác này.");
+  }
 
-## 15. Câu hỏi cần xác nhận từ tài liệu PRD
+  // Bước 2: Kiểm tra dữ liệu đầu vào cần thiết.
+  if (!yeuCau.chuyen_vien_id || !yeuCau.khung_gio_id || !yeuCau.loai_tu_van) {
+    throw loiHttp(400, "Vui lòng chọn dịch vụ, chuyên viên và khung giờ.");
+  }
 
-- Ai được sử dụng hệ thống và có cần xác minh email/tư cách sinh viên không?
-- Lịch được xác nhận tự động hay cần chuyên viên duyệt?
-- Hỗ trợ tư vấn trực tiếp, trực tuyến hay cả hai?
-- Thời lượng buổi hẹn, thời gian đặt trước và quy tắc đổi/hủy là gì?
-- Sinh viên có được chọn chuyên viên không? Có cần phân công tự động không?
-- Có cần thanh toán, nhắc lịch qua email/SMS hay tích hợp lịch cá nhân không?
+  // Bước 3: Gộp thao tác kiểm tra và tạo lịch trong transaction.
+  // Transaction giúp tránh hai yêu cầu cùng đặt thành công một khung giờ.
+  return khoDuLieu.transaction(async (giaoDich) => {
+    // Bước 4: Khóa bản ghi khung giờ để các yêu cầu khác phải chờ kiểm tra.
+    const khungGio = await giaoDich.timVaKhoaKhungGio(yeuCau.khung_gio_id);
+
+    // Bước 5: Xác minh khung giờ tồn tại và thuộc đúng chuyên viên.
+    if (!khungGio || khungGio.chuyen_vien_id !== yeuCau.chuyen_vien_id) {
+      throw loiHttp(404, "Không tìm thấy khung giờ phù hợp.");
+    }
+
+    // Bước 6: Chỉ tiếp tục khi giờ vẫn còn trống và chưa qua thời điểm bắt đầu.
+    if (khungGio.trang_thai !== "con_trong" || khungGio.bat_dau_luc <= new Date()) {
+      throw loiHttp(409, "Khung giờ không còn khả dụng. Vui lòng chọn giờ khác.");
+    }
+
+    // Bước 7: Tạo bản ghi lịch hẹn với trạng thái ban đầu.
+    const lichHen = await giaoDich.themLichHen({
+      sinh_vien_id: nguoiDung.id,
+      chuyen_vien_id: khungGio.chuyen_vien_id,
+      khung_gio_id: khungGio.id,
+      loai_tu_van: yeuCau.loai_tu_van,
+      trang_thai: "cho_xac_nhan",
+    });
+
+    // Bước 8: Đánh dấu giờ đã được sử dụng trong cùng giao dịch.
+    await giaoDich.capNhatKhungGio(khungGio.id, { trang_thai: "da_dat" });
+
+    // Bước 9: Chỉ trả các trường cần thiết cho giao diện.
+    return {
+      ma_lich: lichHen.ma_lich,
+      trang_thai: lichHen.trang_thai,
+      bat_dau_luc: khungGio.bat_dau_luc,
+    };
+  });
+}
+```
+
+### 11.3 Luồng hủy lịch
+
+```js
+// Mã giả: hủy lịch sau khi kiểm tra chủ sở hữu và chính sách.
+async function huyLichHen(maLich, nguoiDung) {
+  // Bước 1: Tìm lịch; chỉ truy xuất lịch thuộc đúng người dùng nếu là sinh viên.
+  const lichHen = await khoDuLieu.timLichTheoMa(maLich);
+
+  if (!lichHen) {
+    throw loiHttp(404, "Không tìm thấy lịch hẹn.");
+  }
+
+  // Bước 2: Kiểm tra quyền sở hữu; quản trị/chuyên viên có quy tắc riêng.
+  if (nguoiDung.vai_tro === "sinh_vien" && lichHen.sinh_vien_id !== nguoiDung.id) {
+    throw loiHttp(403, "Bạn không có quyền thay đổi lịch này.");
+  }
+
+  // Bước 3: Chỉ lịch ở trạng thái phù hợp mới được hủy.
+  if (!["cho_xac_nhan", "da_xac_nhan"].includes(lichHen.trang_thai)) {
+    throw loiHttp(409, "Lịch này không thể hủy ở trạng thái hiện tại.");
+  }
+
+  // Bước 4: Kiểm tra thời hạn hủy theo chính sách của đơn vị.
+  if (!duocPhepHuyTheoChinhSach(lichHen)) {
+    throw loiHttp(409, "Lịch đã quá thời hạn cho phép hủy.");
+  }
+
+  // Bước 5: Cập nhật lịch và giải phóng khung giờ trong một giao dịch.
+  await khoDuLieu.transaction(async (giaoDich) => {
+    await giaoDich.capNhatTrangThaiLich(lichHen.id, "da_huy");
+    await giaoDich.capNhatTrangThaiKhungGio(lichHen.khung_gio_id, "con_trong");
+    await giaoDich.ghiNhatKy({ hanh_dong: "huy_lich", lich_id: lichHen.id, nguoi_thuc_hien: nguoiDung.id });
+  });
+
+  // Bước 6: Gửi thông báo không kèm nội dung nhạy cảm.
+  await guiThongBaoThayDoiLich(lichHen.id, "Lịch hẹn đã được cập nhật.");
+
+  return { thong_bao: "Đã hủy lịch hẹn." };
+}
+```
+
+### 11.4 Các trạng thái thường gặp
+
+```text
+cho_xac_nhan  : Sinh viên đã gửi yêu cầu, đang chờ xử lý.
+da_xac_nhan   : Lịch đã được xác nhận.
+da_huy        : Lịch đã bị hủy theo quy trình.
+hoan_thanh    : Buổi tư vấn đã kết thúc.
+vang_mat      : Người tham gia không đến buổi hẹn.
+```
+
+Tên trạng thái có thể thay đổi theo quy định thực tế của nhà trường.
+
+---
+
+## 12. Giao diện dự kiến
+
+### 12.1 Trang danh sách dịch vụ
+
+Hiển thị các nhóm dịch vụ, mô tả ngắn, thời lượng, hình thức tư vấn và nút xem chuyên viên/giờ trống.
+
+### 12.2 Trang chọn khung giờ
+
+- Cho phép chọn ngày.
+- Chỉ hiển thị giờ còn khả dụng.
+- Ghi rõ múi giờ và thời lượng buổi hẹn.
+- Khi giờ vừa được người khác đặt, yêu cầu tải lại hoặc chọn giờ khác.
+
+### 12.3 Trang xác nhận lịch
+
+Trước khi gửi yêu cầu, hiển thị lại loại tư vấn, chuyên viên, thời gian và hình thức. Không yêu cầu người dùng nhập nội dung nhạy cảm nếu chưa có mục đích rõ ràng.
+
+### 12.4 Trang lịch cá nhân
+
+Hiển thị lịch theo trạng thái: sắp tới, chờ xác nhận, đã hoàn thành và đã hủy. Thao tác đổi/hủy cần giải thích quy định áp dụng.
+
+---
+
+## 13. Bảo mật và quyền riêng tư
+
+1. Chỉ thu thập dữ liệu tối thiểu cần cho việc tổ chức lịch.
+2. Không lưu mật khẩu dạng văn bản thuần; sử dụng cơ chế băm mật khẩu an toàn ở hệ thống thực tế.
+3. Kiểm tra quyền trên máy chủ ở mọi API có dữ liệu cá nhân.
+4. Không để thông tin nhạy cảm xuất hiện trong URL, thông báo màn hình khóa hoặc nhật ký kỹ thuật.
+5. Chuyên viên chỉ xem thông tin cần thiết cho buổi hẹn được phân công.
+6. Hạn chế quyền quản trị và lưu nhật ký truy cập/thay đổi quan trọng.
+7. Có chính sách về mục đích sử dụng, thời hạn lưu trữ, chỉnh sửa và xóa dữ liệu.
+8. Dùng dữ liệu giả khi phát triển và trình diễn; không tải dữ liệu thật của sinh viên lên kho mã nguồn.
+9. Hiển thị rõ hệ thống đặt lịch không thay thế dịch vụ cấp cứu, chẩn đoán hoặc tư vấn pháp lý chính thức.
+10. Nếu người dùng đang gặp nguy hiểm tức thời, hướng dẫn liên hệ dịch vụ khẩn cấp tại địa phương hoặc người hỗ trợ đáng tin cậy.
+
+---
+
+## 14. Kế hoạch kiểm thử
+
+| Mã | Tình huống kiểm thử | Kết quả mong đợi |
+|---|---|---|
+| TC-01 | Đăng nhập bằng thông tin hợp lệ | Vào được khu vực theo vai trò |
+| TC-02 | Sinh viên gửi lịch với dữ liệu hợp lệ | Lịch được tạo và trả mã lịch |
+| TC-03 | Bỏ trống khung giờ | Hiển thị lỗi, không tạo lịch |
+| TC-04 | Đặt khung giờ đã có người đặt | Báo giờ không khả dụng, không tạo lịch trùng |
+| TC-05 | Hai yêu cầu đồng thời cùng một giờ | Chỉ một yêu cầu thành công |
+| TC-06 | Sinh viên truy cập lịch của người khác | Bị từ chối truy cập |
+| TC-07 | Sinh viên hủy lịch đúng thời hạn | Lịch chuyển sang đã hủy, giờ được giải phóng theo quy tắc |
+| TC-08 | Hủy lịch quá hạn | Hệ thống từ chối và giải thích lý do |
+| TC-09 | Chuyên viên xem lịch không được phân công | Không hiển thị dữ liệu trái quyền |
+| TC-10 | Máy chủ lỗi giữa thao tác đặt lịch | Không để lại lịch/khung giờ ở trạng thái mâu thuẫn |
+| TC-11 | Gửi thông báo lịch | Thông báo không chứa nội dung tư vấn nhạy cảm |
+| TC-12 | Mở giao diện trên điện thoại | Nội dung và thao tác chính vẫn sử dụng được |
+
+---
+
+## 15. Kế hoạch thực hiện
+
+### Giai đoạn 1 – Phân tích
+
+- Đọc PRD và tài liệu ghi chú.
+- Thống nhất vai trò người dùng.
+- Chốt quy tắc xác nhận, đổi lịch, hủy lịch và thời hạn.
+- Chốt dữ liệu cần thu thập và dữ liệu không lưu.
+
+### Giai đoạn 2 – Thiết kế
+
+- Vẽ sơ đồ luồng nghiệp vụ.
+- Thiết kế giao diện chính.
+- Thiết kế mô hình dữ liệu và API.
+- Xác định quyền của từng vai trò.
+
+### Giai đoạn 3 – Xây dựng
+
+- Xây dựng đăng nhập và phân quyền.
+- Xây dựng danh mục dịch vụ và chuyên viên.
+- Xây dựng quản lý giờ trống.
+- Xây dựng đặt lịch, đổi lịch, hủy lịch.
+- Xây dựng thông báo và trang quản trị cần thiết.
+
+### Giai đoạn 4 – Kiểm thử
+
+- Kiểm thử chức năng theo bảng test case.
+- Kiểm thử quyền truy cập và dữ liệu.
+- Kiểm thử tình huống đặt đồng thời.
+- Kiểm thử giao diện trên nhiều kích thước màn hình.
+
+### Giai đoạn 5 – Hoàn thiện và trình bày
+
+- Sửa lỗi, bổ sung hướng dẫn sử dụng.
+- Dùng dữ liệu giả để trình diễn.
+- Hoàn thiện báo cáo, sơ đồ và tài liệu cài đặt.
+
+---
+
+## 16. Cấu trúc thư mục dự án
+
+Một cấu trúc tham khảo khi dự án được phát triển đầy đủ:
+
+```text
+he-thong-dat-lich-tu-van/
+├── docs/
+│   ├── HE_THONG_DAT_LICH_TU_VAN.md  # Tài liệu phân tích và thiết kế
+│   ├── API.md                       # Tài liệu API chi tiết
+│   └── TEST_CASES.md                # Danh sách kiểm thử
+├── frontend/                        # Giao diện dành cho người dùng
+├── backend/                         # API và xử lý nghiệp vụ
+├── database/                        # Lược đồ và dữ liệu mẫu
+├── tests/                           # Kiểm thử tự động
+├── .env.example                     # Tên biến môi trường mẫu, không chứa bí mật
+└── README.md                        # Giới thiệu và cách chạy dự án
+```
+
+Cấu trúc trên là đề xuất; cần điều chỉnh cho phù hợp với công nghệ và cấu trúc repository thực tế. Không đưa mật khẩu, khóa API hoặc dữ liệu thật vào Git.
+
+---
+
+## 17. Hướng dẫn xem tài liệu bằng Visual Studio Code
+
+1. Tải hoặc clone repository về máy.
+2. Mở thư mục repository bằng Visual Studio Code.
+3. Mở file `HE_THONG_DAT_LICH_TU_VAN.md`.
+4. Nhấn **Ctrl + Shift + V** (Windows/Linux) hoặc **Cmd + Shift + V** (macOS) để xem Markdown Preview.
+5. Để xem song song mã nguồn và bản xem trước, nhấn **Ctrl + K**, sau đó **V**.
+6. Các tiêu đề bắt đầu bằng `#`, `##`, `###`; khối mã được đặt trong dấu ba backtick và có tên ngôn ngữ như `js`, `json` hoặc `text`.
+
+Markdown là định dạng tài liệu, không phải chương trình chạy trực tiếp. Các khối mã trong tài liệu này dùng để giải thích thiết kế; muốn chạy hệ thống cần xây dựng ứng dụng frontend/backend tương ứng.
+
+---
+
+## 18. Các nội dung cần xác nhận
+
+- Sinh viên đăng nhập bằng email cá nhân, email trường hay tài khoản được cấp?
+- Lịch được xác nhận tự động hay phải chờ chuyên viên duyệt?
+- Sinh viên có quyền chọn chuyên viên không?
+- Hình thức tư vấn là trực tiếp, trực tuyến hay cả hai?
+- Thời lượng buổi tư vấn và thời gian nghỉ giữa các lịch là bao lâu?
+- Quy tắc đổi/hủy và thời hạn hủy là gì?
+- Có cần gửi email, SMS hay thông báo trong ứng dụng?
 - Dữ liệu nào được lưu, ai được xem và lưu trong bao lâu?
-- Quy trình hỗ trợ khẩn cấp và đầu mối liên hệ của trường là gì?
-- Công nghệ, môi trường triển khai và tiêu chí nghiệm thu đã được chọn chưa?
+- Có cần tích hợp lịch cá nhân hoặc hệ thống tài khoản của trường không?
+- Tiêu chí nghiệm thu và công nghệ triển khai do giảng viên/nhóm lựa chọn là gì?
 
-## 16. Tài liệu nguồn
+---
 
-- [Issue dự án: Hệ thống đặt lịch tư vấn tâm lý và pháp lý cho sinh viên](https://github.com/nguyenminhchinh12345py-sudo/Nguy-n-MinhCh-nh/issues/1)
+## 19. Tài liệu tham khảo của đề tài
+
+- [Issue #1 – Hệ thống đặt lịch tư vấn tâm lý và pháp lý cho sinh viên](https://github.com/nguyenminhchinh12345py-sudo/Nguy-n-MinhCh-nh/issues/1)
 - [Tài liệu dự án chia theo ghi chú (DOCX)](https://github.com/user-attachments/files/34620025/Tai_lieu_du_an_chia_the_ghi_chu.docx)
 - [PRD đặt lịch tư vấn tâm lý và pháp lý (DOCX)](https://github.com/user-attachments/files/34620030/PRD_Dat_lich_tu_van_tam_ly_va_phap_ly.docx)
 
 ---
 
-**Việc cần làm tiếp theo:** đối chiếu tài liệu này với nội dung hai tệp DOCX, thay các phần “dự kiến/cần xác nhận” bằng yêu cầu đã thống nhất và cập nhật công nghệ thực tế của dự án.
+**Ghi chú hoàn thiện:** Sau khi đọc kỹ hai tệp DOCX, thay các nội dung “dự kiến/cần xác nhận” bằng yêu cầu chính thức của đề tài; bổ sung tên thành viên, giảng viên hướng dẫn, công nghệ sử dụng và ảnh giao diện thực tế nếu cần nộp báo cáo.
